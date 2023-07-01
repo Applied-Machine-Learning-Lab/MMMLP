@@ -1,0 +1,2 @@
+from recbole.quick_start import run_recbole
+run_recbole(model="Baseline",dataset="ml-100k",config_dict={"epochs":100,"neg_sampling":None,"train_batch_size":256,"learning_rate":0.0001,"eval_batch_size":512,"stopping_step":10})
