@@ -1,2 +1,2 @@
 # WWW2023
-MMMLP code
+implementation code for "MMMLP: Multi-modal Multilayer Perceptron for Sequential Recommendations" 
