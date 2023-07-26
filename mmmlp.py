@@ -134,13 +134,12 @@ class MMMLP(SequentialRecommender):
         self.model =  self.vMixer(image_size = (300,300),channels = 3,patch_size = 50,dim = 128,depth = 4)
         device = torch.device("cuda:0")
         self.model = self.model.to(device)
-        #Text dict
-        F=open('D:/BaiduNetdiskDownload/New_dict/1m_text.pkl','rb')
-        self.content=pickle.load(F)
         
-        #Image dict
-        F1=open('D:/BaiduNetdiskDownload/New_dict/1m_image.pkl','rb')
-        self.content1=pickle.load(F1)
+        # Process the raw image data here
+        file_path = 'path/to/your/raw_data.pkl'
+
+        file = open(file_path)
+        self.content=pickle.load(file)
 
         
         if self.loss_type == 'BPR':
@@ -192,7 +191,7 @@ class MMMLP(SequentialRecommender):
         for i in np.nditer(iid_series):
             if i != np.array('[PAD]'):
                 externalid = str(i)
-                img_tensor = self.content1[externalid] # numpy数组格式为（H,W,C）,tensor数据格式是torch(C,H,W)
+                img_tensor = self.content1[externalid] # numpy array format is (H,W,C),tensor data format is torch(C,H,W)
                 
                 
             else:
@@ -218,7 +217,7 @@ class MMMLP(SequentialRecommender):
             if i != np.array('[PAD]'):
                 externalid = str(i)
 
-                text_tensor = self.content[externalid] # numpy数组格式为（H,W,C）,tensor数据格式是torch(C,H,W)
+                text_tensor = self.content[externalid] # numpy array format is (H,W,C),tensor data format is torch(C,H,W)
                 
             else:
                 text_tensor = torch.zeros([1,128]).cuda()
