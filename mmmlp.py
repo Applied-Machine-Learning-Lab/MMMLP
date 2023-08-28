@@ -125,6 +125,9 @@ class MMMLP(SequentialRecommender):
         self.t_tokenMixer = PreNormResidual(self.hidden_size, FeedForward(self.max_seq_length, expansion_factor, self.hidden_dropout_prob, chan_first))
         self.t_channelMixer = PreNormResidual(self.hidden_size, FeedForward(self.hidden_size, expansion_factor, self.hidden_dropout_prob))
         self.t_LayerNorm = nn.LayerNorm(self.hidden_size, eps=self.layer_norm_eps)
+        self.v_tokenMixer = PreNormResidual(self.hidden_size, FeedForward(self.max_seq_length, expansion_factor, self.hidden_dropout_prob, chan_first))
+        self.v_channelMixer = PreNormResidual(self.hidden_size, FeedForward(self.hidden_size, expansion_factor, self.hidden_dropout_prob))
+        self.v_LayerNorm = nn.LayerNorm(self.hidden_size, eps=self.layer_norm_eps)
         self.LayerNormFeature = nn.LayerNorm(3*self.hidden_size, eps=self.layer_norm_eps)
         self.dropout = nn.Dropout(self.hidden_dropout_prob)
 
@@ -202,10 +205,10 @@ class MMMLP(SequentialRecommender):
 
         imixer_output = torch.cat(a)
         imixer_output = torch.reshape(imixer_output,(rows,50,128))
-        imixer_output = self.LayerNorm(imixer_output)
+        imixer_output = self.v_LayerNorm(imixer_output)
         for _ in range(4):
-            ioutput = self.tokenMixer(imixer_output)
-            ioutput = self.channelMixer(ioutput)
+            ioutput = self.v_tokenMixer(imixer_output)
+            ioutput = self.v_channelMixer(ioutput)
         
         return ioutput
 
